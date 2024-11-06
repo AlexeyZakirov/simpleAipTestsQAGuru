@@ -12,14 +12,14 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
-public class ReqresApiTests extends TestBase{
+public class ReqresApiTests extends TestBase {
     private final Faker faker = new Faker();
 
     @DisplayName("Проверка количества пользователей на одной странице")
     @Test
-    public void totalUsersOnPageTest(){
-        int page = faker.number().numberBetween(1,2);
-        given().queryParam("page",page)
+    public void totalUsersOnPageTest() {
+        int page = faker.number().numberBetween(1, 2);
+        given().queryParam("page", page)
                 .get("/users")
                 .then()
                 .log().all()
@@ -29,8 +29,8 @@ public class ReqresApiTests extends TestBase{
 
     @DisplayName("Проверка, что список пользователей пустой на не существующей странице")
     @Test
-    public void emptyListUsersPageTest(){
-        int page = faker.number().numberBetween(4,50);
+    public void emptyListUsersPageTest() {
+        int page = faker.number().numberBetween(4, 50);
         given().queryParam("page", page)
                 .get("/users")
                 .then()
@@ -39,15 +39,16 @@ public class ReqresApiTests extends TestBase{
                 .body("data", hasSize(0));
     }
 
-    static Stream<Arguments> userNamesAndIdShouldBeEqualsTest(){
+    static Stream<Arguments> userNamesAndIdShouldBeEqualsTest() {
         return Stream.of(
                 Arguments.of(4, "Eve", "Holt"),
                 Arguments.of(9, "Tobias", "Funke")
         );
     }
+
     @MethodSource()
     @ParameterizedTest(name = "Проверка, что у пользователя с id = {0}, имя - {1}, фамилия {2}")
-    public void userNamesAndIdShouldBeEqualsTest(int id, String firstName, String lastName){
+    public void userNamesAndIdShouldBeEqualsTest(int id, String firstName, String lastName) {
         given().pathParam("id", id)
                 .get("/users/{id}")
                 .then()
@@ -60,7 +61,7 @@ public class ReqresApiTests extends TestBase{
 
     @DisplayName("Проверка создания пользователя с именем и работой")
     @Test
-    public void createUserWithNameAndJobTest(){
+    public void createUserWithNameAndJobTest() {
         String name = faker.name().firstName();
         String body = String.format("{\n" +
                 "    \"name\": \"%s\",\n" +
@@ -77,7 +78,7 @@ public class ReqresApiTests extends TestBase{
 
     @DisplayName("Проверка создания пользователя без указания работы")
     @Test
-    public void createUserWithoutJobTest(){
+    public void createUserWithoutJobTest() {
         String name = faker.name().firstName();
         String body = String.format("{\n" +
                 "    \"name\": \"%s\"\n" +
@@ -93,7 +94,7 @@ public class ReqresApiTests extends TestBase{
 
     @DisplayName("Проверка создания пользователя без указания имени")
     @Test
-    public void createUserWithoutNameTest(){
+    public void createUserWithoutNameTest() {
         String body = "{\n" +
                 "    \"job\": \"leader\"\n" +
                 "}";
